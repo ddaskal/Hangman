@@ -55,9 +55,16 @@ def hangman():
     print("The answer has " + str(answer.length) + " letters.")
 
     while errors < 6:
+        if " _ " not in answer.print_answer():
+            print("CONGRATULATIONS! You win!")
+            break
+
+        print("You have this many attempts left: " + str(6-errors))
+        print("Here are all of the letters that you have guessed, both correct and incorrect: "
+              + str(sorted(existing_guess)))
         print("Here is what you've guessed correctly so far: " + answer.print_answer())
         # Ask user for input letter or attempt guess at word
-        user_input = raw_input("Input a single letter guess A-Z or multiple letters to guess the answer.")
+        user_input = raw_input("Input a single letter guess A-Z or multiple letters to guess the answer: ")
 
         # Check if real letter, check if user has requested letter before, check if letter is in word
         if user_input.isalpha():
@@ -73,9 +80,8 @@ def hangman():
                     else:
                         print("Oops! The answer does not contain your letter: " + user_input)
                         errors += 1
-                        print("You have this many attempts left: " + str(6-errors))
-                        print("Here is what you've guessed so far: " + answer.print_answer())
             # They guessed a word
+            # TODO: IF THEY ALREADY HAVE LETTERS, MAKE SURE THE WORD MATCHES EXISTING GUESSES
             else:
                 if len(user_input) != answer.length:
                     print("Oops! Your input word length of " + str(len(user_input)) +
@@ -86,7 +92,6 @@ def hangman():
                 else:
                     print("Sorry, your input word was incorrect: " + user_input)
                     errors += 1
-                    print("You have this many attempts left: " + str(6-errors))
         else:
             print("Non-Letter detected. Try again.")
             continue
