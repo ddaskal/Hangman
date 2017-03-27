@@ -32,9 +32,9 @@ class Answer(object):
         printed_answer = ""
         for letter in self.letters:
             if bool(letter.values()[0]):
-                printed_answer += " " + str(letter.keys()) + " "
+                printed_answer += "".join(letter.keys()) + " "
             else:
-                printed_answer += " _ "
+                printed_answer += "_ "
         return printed_answer
 
     def update_guess(self, user_input):
@@ -55,7 +55,7 @@ def hangman():
     print("The answer has " + str(answer.length) + " letters.")
 
     while errors < 6:
-        if " _ " not in answer.print_answer():
+        if "_ " not in answer.print_answer():
             print("CONGRATULATIONS! You win!")
             break
 
@@ -81,7 +81,6 @@ def hangman():
                         print("Oops! The answer does not contain your letter: " + user_input)
                         errors += 1
             # They guessed a word
-            # TODO: IF THEY ALREADY HAVE LETTERS, MAKE SURE THE WORD MATCHES EXISTING GUESSES
             else:
                 if len(user_input) != answer.length:
                     print("Oops! Your input word length of " + str(len(user_input)) +
@@ -90,8 +89,16 @@ def hangman():
                     print("CONGRATULATIONS! You win!")
                     break
                 else:
-                    print("Sorry, your input word was incorrect: " + user_input)
-                    errors += 1
+                    count = 1
+                    for letter in answer.letters:
+                        if bool(letter.values()[0]) and ("".join(letter.keys()) != user_input[count-1]):
+                            print("You guessed a word that doesn't match the letters you already know in the answer.")
+                            break
+                        elif count == answer.length and answer.name != user_input:
+                            print("Sorry, your input word was incorrect: " + user_input)
+                            errors += 1
+                            break
+                        count += 1
         else:
             print("Non-Letter detected. Try again.")
             continue
